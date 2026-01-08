@@ -1,0 +1,5 @@
+Line 5: Over the lazy dog.
+Line 6: C++ is powerful and fast.
+Line 7: Modern C++ is safe.
+Line 8: Use standard library.
+Line 9: Avoid raw loops.

@@ -1,0 +1,11 @@
+Line 1: Hello world!
+Line 2: Programming in C++.
+Line 3: This is a sample text.
+Line 4: The quick brown fox jumps.
+Line 5: Over the lazy dog.
+Line 6: C++ is powerful and fast.
+Line 7: Modern C++ is safe.
+Line 8: Use standard library.
+Line 9: Avoid raw loops.
+Line 10: Prefer algorithms.
+Line 11: Keep learning!

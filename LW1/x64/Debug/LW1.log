@@ -1,0 +1,5 @@
+﻿  LW1.cpp
+D:\1. Aleksandr Alekseevich\1. Projects C++\Information Technology\LW1\LW1.cpp(21,27): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\1. Aleksandr Alekseevich\1. Projects C++\Information Technology\LW1\LW1.cpp(22,28): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+D:\1. Aleksandr Alekseevich\1. Projects C++\Information Technology\LW1\LW1.cpp(24,23): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+  LW1.vcxproj -> D:\1. Aleksandr Alekseevich\1. Projects C++\Information Technology\x64\Debug\LW1.exe
