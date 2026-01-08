@@ -4,7 +4,6 @@
 
 int main() {
 
-    setlocale(LC_ALL, "ru");
     std::cout << std::fixed << std::setprecision(10); // Для большего отображения знаков после запятой
 
     /*
