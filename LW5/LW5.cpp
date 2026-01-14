@@ -14,7 +14,6 @@ void print_matrix(const int mat[][100], int n, int m) {
 }
 
 int main() {
-    setlocale(LC_ALL, "RU");
     constexpr int MAX_SIZE = 100;
     int mat[MAX_SIZE][MAX_SIZE];
     int n, m;
@@ -43,7 +42,7 @@ int main() {
     std::cout << "Исходная матрица:\n";
     print_matrix(mat, n, m);
 
-    // Предварительные массивы: мин/макс по строкам и столбцам
+    // Предварительные массивы: мин/макс по строкам и столбцам (безопасное промежуточное хранение)
     std::vector<int> row_min(n, mat[0][0]);
     std::vector<int> row_max(n, mat[0][0]);
     std::vector<int> col_min(m, mat[0][0]);
@@ -70,7 +69,7 @@ int main() {
     }
 
     // Поиск седловых точек
-    bool found = false;
+    bool found = false; // флаг
     std::cout << "\nСедловые точки (строка, столбец, значение):\n";
     for (int i = 0; i < n; ++i) {
         for (int j = 0; j < m; ++j) {

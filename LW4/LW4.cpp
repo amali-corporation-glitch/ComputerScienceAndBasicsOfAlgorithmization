@@ -12,7 +12,6 @@ void print_array(const int arr[], int n) {
 }
 
 int main() {
-    setlocale(LC_ALL, "RU");
     constexpr int MAX_SIZE = 100;
     int arr[MAX_SIZE];
     int n;
@@ -45,7 +44,8 @@ int main() {
     std::cin >> k;
     int remove_index = k - 1; // - 1 потому что индекс начинается с 0
 
-    if (remove_index >= 0 && remove_index < n) {
+  
+    if (remove_index >= 0 && remove_index < n) { // Проверка ввода корректного значения
         // Сдвигаем все элементы после remove_index влево
         for (int i = remove_index; i < n - 1; ++i) {
             arr[i] = arr[i + 1];

@@ -1,11 +1,11 @@
-Line 1: Hello world!
-Line 2: Programming in C++.
-Line 3: This is a sample text.
-Line 4: The quick brown fox jumps.
-Line 5: Over the lazy dog.
-Line 6: C++ is powerful and fast.
-Line 7: Modern C++ is safe.
-Line 8: Use standard library.
-Line 9: Avoid raw loops.
-Line 10: Prefer algorithms.
-Line 11: Keep learning!
+Why don't programmers like nature? It has too many bugs!
+I told my computer I needed a break... now it won't stop sending me Kit-Kats.
+Why did the programmer quit his job? He didn't get arrays.
+My code has no errors, but my cat sat on the keyboard – new feature unlocked!
+Why do Java developers wear glasses? Because they don't C#!
+I'm reading a book on anti-gravity – it's impossible to put down!
+Why did the scarecrow win an award? He was outstanding in his field!
+Parallel lines have so much in common... it's a shame they'll never meet.
+I used to be a baker, but I couldn't make enough dough – so I turned to bread() functions!
+What's a computer's favorite snack? Microchips, but it prefers cookies!
+Why do Java developers wear glasses? Because they don't C#!

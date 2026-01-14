@@ -1,20 +1,20 @@
-﻿#ifdef _MSC_VER // макрос, определённый только в Microsoft Visual C++.
+﻿// Ругается MSVC на strncpy
+#ifdef _MSC_VER // макрос, определённый только в Microsoft Visual C++.
 #define _CRT_SECURE_NO_WARNINGS // отключает предупреждения о «небезопасных» C-функциях (strncpy, fopen и др.).
 #endif
 
 #include <iostream>  // ввод/вывод
 #include <fstream>   // работа с файлами
 #include <cstring>   // std::strncpy
-#include <locale>    // setlocale для русского языка
 
-// Структура "Школьник" — только POD-типы (без std::string!)
+// Структура "Школьник"
 struct Student {
     char surname[30];     // фамилия
     char name[30];        // имя
     char patronymic[30];  // отчество
     int grade;            // класс
     char phone[20];       // номер телефона
-    int marks[4];         // оценки: [матем, физика, русский, литература]
+    int marks[4];         // оценки: [математика, физика, русский, литература]
 };
 
 // Создание студента
@@ -24,8 +24,8 @@ Student make_student(
     int math, int physics, int rus, int lit
 ) {
     Student s{};
-    std::strncpy(s.surname, surname, sizeof(s.surname) - 1);
-    std::strncpy(s.name, name, sizeof(s.name) - 1);
+    std::strncpy(s.surname, surname, sizeof(s.surname) - 1); // std::strncpy(куда, откуда, сколько_байт)
+    std::strncpy(s.name, name, sizeof(s.name) - 1); // srntcpy - безопасное копирование без переполнения (заполняет свободное пространство \0)
     std::strncpy(s.patronymic, patronymic, sizeof(s.patronymic) - 1);
     s.grade = grade;
     std::strncpy(s.phone, phone, sizeof(s.phone) - 1);
@@ -33,6 +33,8 @@ Student make_student(
     s.marks[1] = physics;
     s.marks[2] = rus;
     s.marks[3] = lit;
+
+    // Функция srntcpy не ставит \0, если кол-во символов строки равно размеру массива
     // Обеспечим завершение строк нулём (на всякий случай)
     s.surname[sizeof(s.surname) - 1] = '\0';
     s.name[sizeof(s.name) - 1] = '\0';
@@ -51,20 +53,22 @@ void print_student(const Student& s) {
 
 // Проверка: есть ли двойка?
 bool has_bad_mark(const Student& s) {
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) { // Простой перебор через цикл
         if (s.marks[i] == 2) return true;
     }
     return false;
 }
 
 // Запись массива студентов в бинарный файл
-bool write_students_to_file(const char* filename, const Student* students, size_t count) {
-    std::ofstream file(filename, std::ios::binary);
+bool write_students_to_file(const char* filename, const Student* students, size_t count) { // write_students_to_file(имя файла, указатель на 1 элемент массива, кол-во студентов)
+    std::ofstream file(filename, std::ios::binary); // поток для записи в файл. td::ios::binary — двоичный режим (избежание искажения символов)
     if (!file.is_open()) {
         std::cerr << "Ошибка: не удалось открыть файл для записи: " << filename << "\n";
         return false;
     }
-    file.write(reinterpret_cast<const char*>(students), count * sizeof(Student));
+    file.write(reinterpret_cast<const char*>(students), count * sizeof(Student)); // reinterpret_cast - указатель students указывает не на Student, а на массив байтов
+    
+    // проверка ошибок записи
     if (file.fail()) {
         std::cerr << "Ошибка записи в файл: " << filename << "\n";
         return false;
@@ -74,17 +78,20 @@ bool write_students_to_file(const char* filename, const Student* students, size_
 
 // Чтение всех студентов из файла
 bool read_all_students(const char* filename, Student* buffer, size_t max_count, size_t& out_count) {
-    std::ifstream file(filename, std::ios::binary);
+    // read_all_students (имя файла, указатель на массив, макс. кол-во записей, реальное кол-во записей)
+    std::ifstream file(filename, std::ios::binary); // поток для чтения
     if (!file.is_open()) {
         std::cerr << "Ошибка: не удалось открыть файл для чтения: " << filename << "\n";
         return false;
     }
+    // Чтение данных
     file.read(reinterpret_cast<char*>(buffer), max_count * sizeof(Student));
-    if (!file && !file.eof()) {
+    if (!file && !file.eof()) { // если поток в хорошем состоянии и достигнут конец файла
         std::cerr << "Ошибка чтения из файла: " << filename << "\n";
         return false;
     }
     out_count = file.gcount() / sizeof(Student);
+    // file.gcount() - возвращает количество байт, реально прочитанных последней операцией read
     return true;
 }
 
@@ -148,7 +155,6 @@ bool add_student_to_front(const char* filename, const Student& new_student) {
 
 // Основная программа
 int main() {
-    std::setlocale(LC_ALL, "");
 
     const char* filename = "students.dat";
 
@@ -156,7 +162,7 @@ int main() {
     Student initial[] = {
         make_student("Иванов", "Иван", "Иванович", 10, "123-45-67", 5, 4, 5, 5),
         make_student("Петров", "Пётр", "Петрович", 9, "987-65-43", 2, 3, 4, 5),  // есть 2
-        make_student("Сидоров", "Сидор", "Сидорович", 11, "555-55-55", 4, 4, 2, 5), // есть 2
+        make_student("Сидоров", "Кирилл", "Сидорович", 11, "555-55-55", 4, 4, 2, 5), // есть 2
         make_student("Кузнецов", "Андрей", "Владимирович", 10, "111-22-33", 5, 5, 5, 5)
     };
 
@@ -185,3 +191,42 @@ int main() {
 
     return 0;
 }
+
+/*
+* Массивы вместо std::string
+* Это сделано специально для двоичных файлов.
+* std::string нельзя просто записать в файл через write() — он содержит указатели, а не сами символы.
+* char[30] — это 30 байт подряд в памяти → можно писать/читать как есть.
+* 
+* 
+* Фиксированный размер
+* sizeof(Student) всегда одинаков (≈130 байт).
+*Это обязательное условие для побайтовой записи в файл.
+* 
+* 
+* Каждая строка обязательно заканчивается символом '\0' (код 0, означает конец строки).
+* Функции (std::cout, strlen, strcpy) читают до первого '\0'
+*
+* 
+* «Функция read_all_students читает данные из двоичного файла в один вызов, используя read.
+* Поскольку размер файла может быть меньше ожидаемого, она использует gcount(),
+* чтобы определить реальное количество прочитанных байт, и делит его на sizeof(Student),
+* получая число записей. Проверка !file && !file.eof() позволяет отличить настоящую ошибку чтения
+* от штатного достижения конца файла».
+* 
+* 
+* «Функция print_file читает весь файл за один вызов с помощью read_all_students,
+* используя статический буфер на 100 записей. Она получает реальное количество прочитанных данных
+* через параметр count и выводит каждую запись с нумерацией, начиная с 1.
+* 
+* 
+* «Функция add_student_to_front. Поскольку двоичные файлы не поддерживают вставку данных в произвольное место,
+* функция читает всё содержимое файла в память, создаёт новый массив с новым студентом в начале,
+* копирует туда старые записи и перезаписывает файл целиком. Это стандартный подход для операций вставки вначало при работе с последовательными файлами».
+* 
+* 
+* «Функция читает все записи из файла, фильтрует их с помощью has_bad_mark,
+* оставляя только тех, у кого нет двоек, и перезаписывает файл отфильтрованным содержимым.
+* Поскольку двоичные файлы не поддерживают частичное удаление, такой подход — единственно корректный».
+
+*/
